@@ -1,0 +1,23 @@
+#!/bin/bash
+#### BEGIN CONFIGURATION ####
+# script to run 
+SCRIPT_FILE=s3-redis-backup.sh
+
+# user to run 
+USERNAME=$(whoami)
+
+# interval time for cron
+DELACCOUNT_MIN="1"
+DELACCOUNT_HOUR="8"
+DELACCOUNT_DAY_OF_MONTH="*"
+DELACCOUNT_MONTH="*"
+DELACCOUNT_DAY_OF_WEEK="*"
+
+#### END CONFIGURATION ####
+
+SCRIPT=`readlink -f $0`
+SCRIPTPATH=`dirname $SCRIPT`
+
+sudo sed -i "/${SCRIPT_FILE}/d" /etc/crontab
+echo "{DELACCOUNT_MIN} ${DELACCOUNT_HOUR} ${DELACCOUNT_DAY_OF_MONTH} ${DELACCOUNT_MONTH} ${DELACCOUNT_DAY_OF_WEEK} ${USERNAME} ${SCRIPTPATH}/${SCRIPT_FILE} >> /dev/null 2>&1" | sudo tee -a /etc/crontab
+
